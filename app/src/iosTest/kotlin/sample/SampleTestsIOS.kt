@@ -1,5 +1,6 @@
 package sample
 
+import rs.mitwit.hello
 import kotlin.test.Test
 import kotlin.test.assertTrue
 

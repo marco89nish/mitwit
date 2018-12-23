@@ -1,10 +1,14 @@
 plugins {
     id 'kotlin-multiplatform' version '1.3.11'
+    id 'kotlinx-serialization' version '1.3.11'
 }
+ext.ktor_version = '1.0.1'
+
 repositories {
     google()
     jcenter()
     mavenCentral()
+    maven { url "https://kotlin.bintray.com/kotlinx" }
 }
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android-extensions'
@@ -12,7 +16,7 @@ apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "rs.mmitic.mitwit"
+        applicationId "rs.mitwit"
         minSdkVersion 15
         targetSdkVersion 28
         versionCode 1
@@ -30,7 +34,10 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'com.android.support:design:28.0.0'
+    implementation "io.ktor:ktor-client-json:$ktor_version"
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    implementation 'junit:junit:4.12'
 }
 
 kotlin {
@@ -41,43 +48,101 @@ kotlin {
         fromPreset(presets.iosX64, 'ios') {
             compilations.main.outputKinds('FRAMEWORK')
         }
-        fromPreset(presets.jvm, 'server')
+        fromPreset(presets.jvm, 'server') {
+            compilations.all {
+                tasks[compileKotlinTaskName].kotlinOptions {
+                    jvmTarget = '1.8'
+                }
+            }
+        }
+
+        all {
+            compilations.all {
+                if (tasks.hasProperty(compileKotlinTaskName)) {
+                    tasks[compileKotlinTaskName].kotlinOptions {
+                        freeCompilerArgs = ["-XXLanguage:+InlineClasses"]
+                    }
+                }
+            }
+        }
     }
+
     sourceSets {
         commonMain {
             dependencies {
                 implementation 'org.jetbrains.kotlin:kotlin-stdlib-common'
+                implementation "io.ktor:ktor-client-core:$ktor_version"
+                implementation "io.ktor:ktor-client-json:$ktor_version"
+                implementation "io.ktor:ktor-gson:$ktor_version"
+                implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core-common:1.1.0'
             }
         }
         commonTest {
             dependencies {
-        		implementation 'org.jetbrains.kotlin:kotlin-test-common'
-        		implementation 'org.jetbrains.kotlin:kotlin-test-annotations-common'
+                implementation 'org.jetbrains.kotlin:kotlin-test-common'
+                implementation 'org.jetbrains.kotlin:kotlin-test-annotations-common'
+                implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core-common:1.1.0'
             }
         }
+
+        clientsMain {
+            dependsOn commonMain
+            dependencies {
+                implementation "io.ktor:ktor-client-core:$ktor_version"
+                implementation "io.ktor:ktor-client-json:$ktor_version"
+            }
+        }
+
+        clientsTest {
+            dependsOn commonTest
+            dependencies {
+                implementation 'org.jetbrains.kotlin:kotlin-test'
+                implementation 'org.jetbrains.kotlin:kotlin-test-junit'
+            }
+        }
+
         androidMain {
+            dependsOn clientsMain
             dependencies {
                 implementation 'org.jetbrains.kotlin:kotlin-stdlib'
+                implementation "io.ktor:ktor-client-cio:$ktor_version"
+                implementation "io.ktor:ktor-client-json:$ktor_version"
+                implementation "io.ktor:ktor-client-core-jvm:$ktor_version"
+                implementation "io.ktor:ktor-client-json-jvm:$ktor_version"
+                implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.0'
+                implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.9.1"
+                implementation "io.ktor:ktor-client-gson:$ktor_version"
             }
         }
         androidTest {
+            dependsOn clientsTest
             dependencies {
                 implementation 'org.jetbrains.kotlin:kotlin-test'
                 implementation 'org.jetbrains.kotlin:kotlin-test-junit'
             }
         }
         iosMain {
+            dependsOn clientsMain
+            dependencies {
+                implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.0'
+            }
         }
         iosTest {
+            dependsOn clientsTest
         }
         serverMain {
             dependencies {
                 implementation 'org.jetbrains.kotlin:kotlin-stdlib'
+                //implementation "io.ktor:ktor-server-core:$ktor_version"
+                implementation "io.ktor:ktor-server-netty:$ktor_version"
+                implementation "io.ktor:ktor-gson:$ktor_version"
+                implementation "ch.qos.logback:logback-classic:1.2.3"
+                compileOnly "io.ktor:ktor-client-cio:$ktor_version"
+                compileOnly "io.ktor:ktor-client-json-jvm:$ktor_version"
             }
-            dependsOn commonMain
+
         }
         serverTest {
-
         }
     }
 }
@@ -103,3 +168,17 @@ task copyFramework {
         }
     }
 }
+
+task runServer(type: JavaExec) {
+    main = 'rs.mitwit.MainKt'
+    def target = kotlin.targets.server
+    def compilation = target.compilations.main
+
+    def classes = files(
+            compilation.runtimeDependencyFiles,
+            compilation.output.allOutputs
+    )
+    classpath = classes
+}
+
+//apply plugin: 'kotlin-android'
