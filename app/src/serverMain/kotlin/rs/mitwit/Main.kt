@@ -19,7 +19,6 @@ fun Application.main() {
     }
     install(CallLogging) {
         level = Level.DEBUG
-
     }
     install(DefaultHeaders)
 

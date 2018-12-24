@@ -2,7 +2,7 @@ package rs.mitwit.network
 
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
-import io.ktor.client.request.headers
+import io.ktor.client.request.header
 import io.ktor.client.request.post
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
@@ -19,7 +19,7 @@ class KtorNetworkService(val hostUrl: String = "192.168.0.11", val hostPort: Int
 
     override suspend fun logoutUser(token: Token) = client.get<Unit> {
         url { host = hostUrl; port = hostPort; encodedPath = "/logout" }
-        headers { "token" to token.token }
+        header("token", token.token)
     }
 
     override suspend fun loginUser(request: UserLoginRequest) = client.post<LoginRequestResult> {
@@ -29,23 +29,23 @@ class KtorNetworkService(val hostUrl: String = "192.168.0.11", val hostPort: Int
     }
 
 
-    override suspend fun getTimeline(token: Token) = client.get<Timeline>{
+    override suspend fun getTimeline(token: Token) = client.get<Timeline> {
         url { host = hostUrl; port = hostPort; encodedPath = "/timeline" }
-        headers { "token" to token.token }
+        header("token", token.token)
+        //Logger.log("token = ${token.token}")
     }
 
     override suspend fun post(post: NewPost, token: Token) = client.post<Post> {
         url { host = hostUrl; port = hostPort; encodedPath = "/post" }
-        headers { "token" to token.token }
+        header("token", token.token)
         contentType(ContentType.Application.Json)
         body = post
     }
 
-    override suspend fun deletePost(postId: String, token: Token) = client.post<Boolean> {
+    override suspend fun deletePost(postId: String, token: Token) = client.get<Boolean> {
         url { host = hostUrl; port = hostPort; encodedPath = "/delete_post" }
-        headers { "token" to token.token }
-        contentType(ContentType.Application.Json)
-        body = postId
+        header("token", token.token)
+        header("postId", postId)
     }
 
 }

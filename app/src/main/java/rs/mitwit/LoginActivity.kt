@@ -8,6 +8,7 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Build
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AlertDialog
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -90,8 +91,8 @@ class LoginActivity : AppCompatActivity(), UserLoginView {
     }
 
     override fun gotoNextScreen() {
-        finish()
-        //todo
+        startActivity(Intent(this, TimelineActivity::class.java))
+        ActivityCompat.finishAffinity(this)
     }
 
 

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.LinearLayoutCompat
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/activity_horizontal_margin"
+        android:background="@color/design_default_color_primary_dark">
+    <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <AutoCompleteTextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/prompt_post_title"
+                android:maxLines="2"
+                android:singleLine="true"/>
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:background="@color/design_default_color_primary"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <AutoCompleteTextView
+                android:id="@+id/comment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/prompt_post_comment"
+                android:singleLine="true"/>
+    </android.support.design.widget.TextInputLayout>
+
+</android.support.v7.widget.LinearLayoutCompat>

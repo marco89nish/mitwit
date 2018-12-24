@@ -13,11 +13,14 @@ import rs.mitwit.models.*
 import java.util.concurrent.atomic.AtomicLong
 
 object PostData {
-
     data class MutableTimeline(val posts: MutableList<Post>)
 
     private val userIdToTimelineMap: MutableMap<UserId, MutableTimeline> = HashMap()
     private val postIdCounter: AtomicLong = AtomicLong(1)
+
+    init {
+        addPost(UserId("1"), NewPost("First post", "Welcome to mitwit"))
+    }
 
     fun getTimeline(userId: UserId) = userIdToTimelineMap[userId]
     fun addPost(userId: UserId, newPost: NewPost): Post {
@@ -41,17 +44,18 @@ object PostData {
 }
 
 fun Routing.deletePostRoute() {
-    post("/delete_post") {
-        val userToken = validateToken() ?: return@post
+    get("/delete_post") {
+        val userToken = validateToken() ?: return@get
 
         val postId = try {
-            call.receive<String>()
+            call.request.headers["postId"]!!
         } catch (t: Throwable) {
             call.respond(HttpStatusCode.BadRequest)
-            return@post
+            return@get
         }
 
         val deleted = PostData.deletePost(userToken.userId, postId)
+        Logger.log("Deleted post = $deleted, postId=$postId, userId=${userToken.userId.id}")
         call.respond(deleted)
     }
 }
@@ -84,10 +88,12 @@ fun Routing.getTimelineRoute() {
 private suspend fun PipelineContext<Unit, ApplicationCall>.validateToken(): UserToken? {
     val token = call.request.headers["token"]
     if (token == null) {
+        Logger.log("Missing auth token")
         call.respond(HttpStatusCode.Forbidden, "Missing auth token"); return null
     }
     val userToken = UserData.validateTokenAndGetUser(Token(token))
     if (userToken == null) {
+        Logger.log("Invalid auth token")
         call.respond(HttpStatusCode.Forbidden, "Invalid auth token"); return null
     }
     return userToken

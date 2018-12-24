@@ -2,6 +2,9 @@ package rs.mitwit.di
 
 import io.ktor.client.HttpClient
 import io.ktor.client.features.json.JsonFeature
+import rs.mitwit.LoadingScreenPresenter
+import rs.mitwit.LoadingScreenPresenterImpl
+import rs.mitwit.LoadingScreenView
 import rs.mitwit.network.KtorNetworkService
 import rs.mitwit.network.UserLoginService
 import rs.mitwit.persistence.InMemoryUserLoginRepository
@@ -53,4 +56,8 @@ object Injector {
 
     fun provideTimelinePresenter(view: TimelineView): TimelinePresenter =
         TimelinePresenterImpl(view, getTimelineUsecase, deletePostUsecase, postToTimelineUsecase)
+
+
+    fun provideLoadingScreenPresenter(view: LoadingScreenView) : LoadingScreenPresenter =
+            LoadingScreenPresenterImpl(view, getLoginState)
 }
