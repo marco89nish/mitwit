@@ -5,8 +5,6 @@ expect object Platform {
     fun getCurrentTimeMillis() : Long
 }
 
-fun hello(): String = "Hello from ${Platform.name}"
-
-class Proxy {
-    fun proxyHello() = hello()
+expect object Logger {
+    fun log(message: String, throwable: Throwable? = null)
 }

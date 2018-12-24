@@ -3,6 +3,7 @@ package rs.mitwit.user
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import rs.mitwit.Logger
 import rs.mitwit.persistence.UserLoginRepository
 import rs.mitwit.arch.BasePresenter
 import rs.mitwit.arch.Presenter
@@ -61,7 +62,8 @@ class UserSignupPresenterImpl(
                     is SignupResultSuccess -> view.gotoNextScreen()
                 }
 
-            } catch (e: Throwable) {
+            } catch (e: Exception) {
+                Logger.log("Signup failed", e)
                 view.setErrorNetworkFailed()
             }
             view.stopProgress()

@@ -3,6 +3,7 @@ package rs.mitwit.posts
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import rs.mitwit.Logger
 import rs.mitwit.arch.BasePresenter
 import rs.mitwit.arch.Presenter
 import rs.mitwit.models.NewPost
@@ -48,7 +49,7 @@ class TimelinePresenterImpl(
 
                 view.setData(timeline)
             } catch (e: Exception) {
-
+                Logger.log("Loading data failed", e)
             }
             view.clearLoading()
         }
@@ -78,6 +79,7 @@ class TimelinePresenterImpl(
                 }
                 view.clearLoading()
             } catch (e: Exception) {
+                Logger.log("Deleting post failed", e)
                 view.notifyDeleteFailed()
                 view.clearLoading()
             }
@@ -108,6 +110,7 @@ class TimelinePresenterImpl(
                 }
                 view.clearLoading()
             } catch (e: Exception) {
+                Logger.log("Creating post failed", e)
                 view.notifyPostingFailed()
                 view.clearLoading()
             }

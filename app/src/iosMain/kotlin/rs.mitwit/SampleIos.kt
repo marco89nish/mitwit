@@ -6,3 +6,9 @@ actual object Platform {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
+
+actual object Logger {
+    actual fun log(message: String, throwable: Throwable?) {
+        //tood
+    }
+}
