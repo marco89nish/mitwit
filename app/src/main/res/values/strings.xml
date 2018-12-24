@@ -21,11 +21,11 @@
     <string name="error_incorrect_email">Enter correct email</string>
     <string name="prompt_post_title">Enter title</string>
     <string name="prompt_post_comment">Enter comment</string>
-
-
     <string name="ok">OK</string>
     <string name="label_sign_up">If you don\'t have a profile, please</string>
     <string name="action_sign_up">Sign Up</string>
-    <string name="menu_logout">logout</string>
+    <string name="menu_logout">Logout</string>
+    <string name="add_post">Add post</string>
+    <string name="refresh">Refresh</string>
 
 </resources>

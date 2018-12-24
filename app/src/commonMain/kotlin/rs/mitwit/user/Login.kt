@@ -1,9 +1,6 @@
 package rs.mitwit.user
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import rs.mitwit.Logger
 import rs.mitwit.persistence.UserLoginRepository
 import rs.mitwit.arch.BasePresenter
@@ -70,7 +67,7 @@ class UserLoginPresenterImpl(
             verificationPassed = false
         }
 
-        if (password.isBlank()){
+        if (password.isBlank()) {
             view.setErrorPasswordNotSet()
             verificationPassed = false
         }
@@ -109,7 +106,8 @@ class LogoutUseCase(private val repository: UserLoginRepository, private val net
     override suspend fun invoke(params: NoParams): Unit {
         val userToken = repository.getUserToken()
         repository.logoutUser()
-        if (userToken != null) networkService.logoutUser(userToken.token)
+        if (userToken != null)
+            GlobalScope.launch(Dispatchers.Default) { networkService.logoutUser(userToken.token) }
     }
 }
 

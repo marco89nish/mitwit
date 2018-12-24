@@ -54,8 +54,10 @@ object Injector {
         PostToTimelineUsecase(userLoginRepository, timelineRepository)
     }
 
+    private val logoutUseCase: LogoutUseCase by lazy { LogoutUseCase(userLoginRepository, userLoginService) }
+
     fun provideTimelinePresenter(view: TimelineView): TimelinePresenter =
-        TimelinePresenterImpl(view, getTimelineUsecase, deletePostUsecase, postToTimelineUsecase)
+        TimelinePresenterImpl(view, getTimelineUsecase, deletePostUsecase, postToTimelineUsecase, logoutUseCase)
 
 
     fun provideLoadingScreenPresenter(view: LoadingScreenView) : LoadingScreenPresenter =

@@ -7,9 +7,11 @@ import kotlinx.coroutines.withContext
 import rs.mitwit.Logger
 import rs.mitwit.arch.BasePresenter
 import rs.mitwit.arch.Presenter
+import rs.mitwit.arch.UseCase
 import rs.mitwit.models.NewPost
 import rs.mitwit.models.Post
 import rs.mitwit.models.Timeline
+import rs.mitwit.user.LogoutUseCase
 
 interface TimelineView {
     fun setData(timeline: Timeline)
@@ -19,6 +21,7 @@ interface TimelineView {
     fun openCreatePostUi()
     fun closeCreatePostUi()
     fun notifyPostingFailed()
+    fun gotoLoginScreen()
 }
 
 interface TimelinePresenter : Presenter {
@@ -26,18 +29,31 @@ interface TimelinePresenter : Presenter {
     fun onAddPostClicked()
     fun onRefreshClicked()
     fun onCreatePostClicked(title: String, content: String)
+    fun logoutClicked()
 }
 
 class TimelinePresenterImpl(
     private val view: TimelineView,
     private val getTimeline: GetTimelineUsecase,
     private val deletePost: DeletePostFromTimelineUsecase,
-    private val postToTimeline: PostToTimelineUsecase
+    private val postToTimeline: PostToTimelineUsecase,
+    private val logoutUseCase: LogoutUseCase
 ) : BasePresenter(),
     TimelinePresenter {
 
     override fun onRefreshClicked() {
         loadData(true)
+    }
+
+    override fun logoutClicked() {
+        launch {
+            try {
+                withContext(Dispatchers.Default) { logoutUseCase(UseCase.NoParams) }
+            } catch (e: Exception) {
+                Logger.log("Failed to logout", e)
+            }
+            view.gotoLoginScreen()
+        }
     }
 
     private fun loadData(forceRefresh: Boolean) {

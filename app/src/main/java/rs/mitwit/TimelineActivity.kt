@@ -1,10 +1,13 @@
 package rs.mitwit
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
 import android.view.ViewGroup
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_timeline.*
@@ -32,9 +35,6 @@ class TimelineActivity : AppCompatActivity(), TimelineView{
         postsAdapter = PostsAdapter(listOf())
 
         posts.apply {
-            // use this setting to improve performance if you know that changes
-            // in content do not change the layout size of the RecyclerView
-            setHasFixedSize(true)
             layoutManager = viewManager
             adapter = postsAdapter
         }
@@ -85,6 +85,32 @@ class TimelineActivity : AppCompatActivity(), TimelineView{
         super.onDestroy()
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_timeline, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.refresh -> {
+                presenter.onRefreshClicked()
+                true
+            }
+            R.id.logout_item -> {
+                presenter.logoutClicked()
+                true
+            }
+            R.id.add_post -> {
+                presenter.onAddPostClicked()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun gotoLoginScreen() {
+        startActivity(Intent(this, LoadingActivity::class.java))
+    }
 
     override fun setData(timeline: Timeline) {
         postsAdapter.updateList(timeline.posts)
