@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">android-app</string>
+    <string name="app_name">mitwit</string>
     <string name="title_activity_login">Sign in</string>
 
     <!-- Strings related to login -->

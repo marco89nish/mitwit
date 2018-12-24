@@ -5,34 +5,30 @@ import rs.mitwit.models.*
 
 /** In-memory repository, useful until we developer proper persistence and/or testing */
 object InMemoryUserLoginRepository : UserLoginRepository {
-    private var loggedInUser: UserId? = null
-    private var token: Token? = null
-    private var validUntil: Long = 0
+    private var userToken: UserToken? = null
 
     override fun loginUser(userToken: UserToken) {
-        loggedInUser = userToken.userId
-        token = userToken.token
-        validUntil = userToken.expiry.epochTime
+        this.userToken = userToken
     }
 
-    override fun getUserToken(): Token? = if (isTokenValid()) token else null
+    override fun getUserToken(): UserToken? = if (isTokenValid()) userToken else null
 
     override fun getLoginState(): UserLoginState =
-        with(loggedInUser) {
+        with(userToken) {
             when (this) {
                 null -> UserNeverLoggedIn
                 else ->
                     if (isTokenValid())
-                        UserLoggedIn(this)
+                        UserLoggedIn(this.userId)
                     else
-                        UserLoggedOut(this)
+                        UserLoggedOut(this.userId)
             }
         }
 
-    private fun isTokenValid() = validUntil > Platform.getCurrentTimeMillis()
+    private fun isTokenValid() = userToken?.let { it.expiry.epochTime > Platform.getCurrentTimeMillis() } ?: false
 
     override fun logoutUser() {
-        validUntil = 0
+        userToken = userToken?.copy(expiry = Time(0))
     }
 
 }

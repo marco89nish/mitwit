@@ -4,7 +4,7 @@ import rs.mitwit.models.*
 
 interface UserLoginRepository {
     fun getLoginState(): UserLoginState
-    fun getUserToken(): Token?
+    fun getUserToken(): UserToken?
     fun logoutUser()
     fun loginUser(userToken: UserToken)
 }

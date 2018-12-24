@@ -90,9 +90,9 @@ class GetLoginStateUseCase(private val repository: UserLoginRepository) : UseCas
 class LogoutUseCase(private val repository: UserLoginRepository, private val networkService: UserLoginService) :
     UseCase<Unit, UseCase.NoParams>() {
     override suspend fun invoke(params: NoParams): Unit {
-        val token = repository.getUserToken()
+        val userToken = repository.getUserToken()
         repository.logoutUser()
-        if (token != null) networkService.logoutUser(token)
+        if (userToken != null) networkService.logoutUser(userToken.token)
     }
 }
 
