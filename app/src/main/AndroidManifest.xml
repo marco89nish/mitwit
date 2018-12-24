@@ -17,8 +17,11 @@
             </intent-filter>
         </activity>
         <activity
-                android:name="rs.mitwit.LoginActivity"
+                android:name=".LoginActivity"
                 android:label="@string/title_activity_login">
+        </activity>
+        <activity android:name=".SignupActivity"/>
+        <activity android:name=".TimelineActivity">
         </activity>
     </application>
 

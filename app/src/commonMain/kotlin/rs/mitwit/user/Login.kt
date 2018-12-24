@@ -1,6 +1,7 @@
 package rs.mitwit.user
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import rs.mitwit.Logger
@@ -23,6 +24,9 @@ interface UserLoginView {
     fun setErrorNetworkFailed()
     fun clearErrors()
     fun gotoNextScreen()
+    fun setErrorUsernameNotSet()
+    fun setErrorPasswordNotSet()
+
 }
 
 class UserLoginPresenterImpl(
@@ -60,6 +64,17 @@ class UserLoginPresenterImpl(
 
     override fun onSignInClicked(username: String, password: String) {
         view.clearErrors()
+        var verificationPassed = true
+        if (username.isBlank()) {
+            view.setErrorUsernameNotSet()
+            verificationPassed = false
+        }
+
+        if (password.isBlank()){
+            view.setErrorPasswordNotSet()
+            verificationPassed = false
+        }
+        if (!verificationPassed) return
         view.startProgress()
         launch {
             try {
@@ -74,8 +89,9 @@ class UserLoginPresenterImpl(
                     view.setErrorBadCredentials()
                 }
 
-            } catch (e: Throwable) {
+            } catch (e: Exception) {
                 Logger.log("Sign in failed", e)
+                if (!isActive) return@launch
                 view.setErrorNetworkFailed()
             }
             view.stopProgress()

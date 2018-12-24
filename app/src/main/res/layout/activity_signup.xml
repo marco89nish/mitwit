@@ -22,19 +22,17 @@
         />
     </android.support.v7.widget.LinearLayoutCompat>
 
-    <android.support.v7.widget.LinearLayoutCompat
-            android:orientation="vertical"
-            android:id="@+id/login_form"
+    <ScrollView
+            android:id="@+id/sign_up_form"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
         <android.support.v7.widget.LinearLayoutCompat
                 android:padding="@dimen/activity_horizontal_margin"
-                android:gravity="center"
-                android:id="@+id/email_login_form"
+                android:layout_gravity="center"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_weight="1">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
             <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
@@ -45,6 +43,21 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_username"
+                        android:maxLines="1"
+                        android:singleLine="true"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <AutoCompleteTextView
+                        android:id="@+id/email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/prompt_email"
+                        android:inputType="textEmailAddress"
                         android:maxLines="1"
                         android:singleLine="true"/>
 
@@ -67,38 +80,30 @@
 
             </android.support.design.widget.TextInputLayout>
 
+            <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/confirm_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/prompt_confirm_password"
+                        android:imeActionId="6"
+                        android:inputType="textPassword"
+                        android:maxLines="1"
+                        android:singleLine="true"/>
+
+            </android.support.design.widget.TextInputLayout>
+
             <android.support.v7.widget.AppCompatButton
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
                     android:padding="@dimen/activity_horizontal_margin"
-                    android:id="@+id/email_sign_in_button"
-                    style="?android:textAppearanceSmall"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="36dp"
-                    android:text="@string/action_sign_in_short"
-                    android:textStyle="bold"/>
-
-        </android.support.v7.widget.LinearLayoutCompat>
-        <android.support.v7.widget.LinearLayoutCompat
-                android:padding="@dimen/activity_horizontal_margin"
-                android:background="@color/design_default_color_primary_dark"
-                android:id="@+id/sign_up_button"
-                android:layout_weight="0"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-            <android.support.v7.widget.AppCompatTextView
-                    android:gravity="center_horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/label_sign_up"/>
-            <android.support.v7.widget.AppCompatTextView
-                    android:textSize="18sp"
-                    android:textStyle="bold|italic"
-                    android:gravity="center_horizontal"
+                    android:id="@+id/sign_in_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/action_sign_up"/>
+
         </android.support.v7.widget.LinearLayoutCompat>
-    </android.support.v7.widget.LinearLayoutCompat>
+    </ScrollView>
 </android.support.v7.widget.LinearLayoutCompat>
