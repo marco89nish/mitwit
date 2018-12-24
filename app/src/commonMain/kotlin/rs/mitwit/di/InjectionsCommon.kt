@@ -5,7 +5,10 @@ import io.ktor.client.features.json.JsonFeature
 import rs.mitwit.network.KtorNetworkService
 import rs.mitwit.network.UserLoginService
 import rs.mitwit.persistence.InMemoryUserLoginRepository
+import rs.mitwit.persistence.TimelineRepository
+import rs.mitwit.persistence.TimelineRepositoryImpl
 import rs.mitwit.persistence.UserLoginRepository
+import rs.mitwit.posts.*
 import rs.mitwit.user.*
 
 
@@ -35,4 +38,19 @@ object Injector {
     fun provideSignupPresenter(view: UserSignupView): UserSignupPresenter =
         UserSignupPresenterImpl(signupUserUseCase, view)
 
+
+    private val timelineRepository: TimelineRepository by lazy { TimelineRepositoryImpl(ktorNetworkService) }
+    private val getTimelineUsecase: GetTimelineUsecase by lazy {
+        GetTimelineUsecase(userLoginRepository, timelineRepository)
+    }
+    private val deletePostUsecase: DeletePostFromTimelineUsecase by lazy {
+        DeletePostFromTimelineUsecase(userLoginRepository, timelineRepository)
+    }
+
+    private val postToTimelineUsecase: PostToTimelineUsecase by lazy {
+        PostToTimelineUsecase(userLoginRepository, timelineRepository)
+    }
+
+    fun provideTimelinePresenter(view: TimelineView): TimelinePresenter =
+        TimelinePresenterImpl(view, getTimelineUsecase, deletePostUsecase, postToTimelineUsecase)
 }
