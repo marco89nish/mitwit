@@ -90,24 +90,7 @@ kotlin {
             }
         }
 
-        clientsMain {
-            dependsOn commonMain
-            dependencies {
-                implementation "io.ktor:ktor-client-core:$ktor_version"
-                implementation "io.ktor:ktor-client-json:$ktor_version"
-            }
-        }
-
-        clientsTest {
-            dependsOn commonTest
-            dependencies {
-                implementation 'org.jetbrains.kotlin:kotlin-test'
-                implementation 'org.jetbrains.kotlin:kotlin-test-junit'
-            }
-        }
-
         androidMain {
-            dependsOn clientsMain
             dependencies {
                 implementation 'org.jetbrains.kotlin:kotlin-stdlib'
                 implementation "io.ktor:ktor-client-cio:$ktor_version"
@@ -120,20 +103,17 @@ kotlin {
             }
         }
         androidTest {
-            dependsOn clientsTest
             dependencies {
                 implementation 'org.jetbrains.kotlin:kotlin-test'
                 implementation 'org.jetbrains.kotlin:kotlin-test-junit'
             }
         }
         iosMain {
-            dependsOn clientsMain
             dependencies {
                 implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.0'
             }
         }
         iosTest {
-            dependsOn clientsTest
         }
         serverMain {
             dependencies {
