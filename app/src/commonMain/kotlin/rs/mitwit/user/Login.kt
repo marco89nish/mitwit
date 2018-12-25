@@ -2,12 +2,12 @@ package rs.mitwit.user
 
 import kotlinx.coroutines.*
 import rs.mitwit.Logger
-import rs.mitwit.persistence.UserLoginRepository
 import rs.mitwit.arch.BasePresenter
 import rs.mitwit.arch.Presenter
 import rs.mitwit.arch.UseCase
 import rs.mitwit.models.*
 import rs.mitwit.network.UserLoginService
+import rs.mitwit.persistence.UserLoginRepository
 
 interface UserLoginPresenter : Presenter {
     fun onSignInClicked(username: String, password: String)
@@ -33,7 +33,6 @@ class UserLoginPresenterImpl(
 ) : BasePresenter(),
     UserLoginPresenter {
 
-    //todo: make base presenter class
     override fun onCreate() {
         super.onCreate()
 

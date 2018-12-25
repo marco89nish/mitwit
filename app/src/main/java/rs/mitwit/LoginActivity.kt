@@ -10,11 +10,15 @@ import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AlertDialog
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.LinearLayout
 import android.widget.TextView
 
 import kotlinx.android.synthetic.main.activity_login.*
+import org.jetbrains.anko.*
 import rs.mitwit.di.Injector
 import rs.mitwit.user.UserLoginView
 
@@ -95,6 +99,52 @@ class LoginActivity : AppCompatActivity(), UserLoginView {
         ActivityCompat.finishAffinity(this)
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_configure, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.configure -> {
+                showConfigDialog()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun showConfigDialog() {
+        fun onConfigSet(host: String, port: Int) {
+            //hack :)
+            Injector.ktorNetworkService.apply {
+                hostUrl = host
+                hostPort = port
+            }
+        }
+
+        lateinit var dialog: DialogInterface
+        dialog = alert {
+            title = "Configure server"
+            isCancelable = true
+            customView {
+                linearLayout {
+                    orientation = LinearLayout.VERTICAL
+                    textView("Server URL:")
+                    val host = editText("192.168.0.11")
+                    textView("Server port:")
+                    val port = editText("8080")
+                    button("OK") {
+                        setOnClickListener {
+                            onConfigSet(host.text.toString(), Integer.parseInt(port.text.toString()))
+                            dialog.dismiss()
+                        }
+                    }
+                    padding = dip(16)
+                }
+            }
+        }.show()
+    }
 
     /**
      * Attempts to sign in or register the account specified by the login form.

@@ -22,7 +22,7 @@ class InMemoryUserLoginRepositoryTest {
     fun `when new user logs in, repo should have logged in state`() {
         val userId = UserId("user1")
         val token = UserToken(userId, Token("token"), Time(Platform.getCurrentTimeMillis()+1000000))
-        repo.loginUser(token)//todo
+        repo.loginUser(token)
 
         val loginState = repo.getLoginState()
 

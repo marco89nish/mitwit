@@ -60,29 +60,35 @@ class SignupActivity : AppCompatActivity(), UserSignupView {
         password.error = getString(R.string.error_incorrect_password)
         password.requestFocus()
     }
+
     override fun setErrorUsernameNotSet() {
-        username.error= getString(R.string.error_username_blank)
+        username.error = getString(R.string.error_username_blank)
         username.requestFocus()
     }
 
     override fun setErrorEmailNotSet() {
-        email.error= getString(R.string.error_incorrect_email)
-        email.requestFocus()    }
+        email.error = getString(R.string.error_incorrect_email)
+        email.requestFocus()
+    }
 
     override fun setErrorPasswordNotSet() {
-        password.error= getString(R.string.error_password_blank)
-        password.requestFocus()     }
+        password.error = getString(R.string.error_password_blank)
+        password.requestFocus()
+    }
 
     override fun setErrorPasswordConfirmNotSet() {
-        confirm_password.error= getString(R.string.error_password_confirmation_blank)
-        confirm_password.requestFocus()    }
+        confirm_password.error = getString(R.string.error_password_confirmation_blank)
+        confirm_password.requestFocus()
+    }
 
     override fun setErrorPasswordConfirmNotMatch() {
-        confirm_password.error= getString(R.string.error_password_confirmation_match)
-        confirm_password.requestFocus()    }
+        confirm_password.error = getString(R.string.error_password_confirmation_match)
+        confirm_password.requestFocus()
+    }
 
     override fun setErrorUsernameTaken() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        username.error = getString(R.string.username_taken)
+        username.requestFocus()
     }
 
     override fun setErrorNetworkFailed() {
@@ -96,8 +102,8 @@ class SignupActivity : AppCompatActivity(), UserSignupView {
 
     override fun clearErrors() {
         // Reset errors.
-        confirm_password.error=null
-        username.error=null
+        confirm_password.error = null
+        username.error = null
         email.error = null
         password.error = null
     }
@@ -117,9 +123,9 @@ class SignupActivity : AppCompatActivity(), UserSignupView {
         val username = username.text.toString()
         val emailStr = email.text.toString()
         val passwordStr = password.text.toString()
-        val passwordConf=confirm_password.text.toString()
+        val passwordConf = confirm_password.text.toString()
 
-        presenter.onSignUpClicked(username, emailStr, passwordStr,passwordConf)
+        presenter.onSignUpClicked(username, emailStr, passwordStr, passwordConf)
     }
 
     /**

@@ -8,7 +8,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import rs.mitwit.models.*
 
-class KtorNetworkService(val hostUrl: String = "192.168.0.11", val hostPort: Int = 80, private val client: HttpClient) :
+class KtorNetworkService(var hostUrl: String = "192.168.0.11", var hostPort: Int = 80, private val client: HttpClient) :
     UserLoginService, UserPostsService {
 
     override suspend fun signupUser(request: UserSignupRequest) = client.post<SignupResultWrapper> {

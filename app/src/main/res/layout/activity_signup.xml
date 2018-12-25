@@ -4,8 +4,7 @@
                                               android:layout_height="match_parent"
                                               android:gravity="center_horizontal"
                                               android:orientation="vertical"
-                                              tools:context="rs.mitwit.LoginActivity"
-                                              android:background="@color/design_default_color_primary">
+                                              tools:context="rs.mitwit.LoginActivity">
 
     <!-- Login progress -->
     <android.support.v7.widget.LinearLayoutCompat

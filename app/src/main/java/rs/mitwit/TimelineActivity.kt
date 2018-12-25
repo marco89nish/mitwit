@@ -1,5 +1,7 @@
 package rs.mitwit
 
+import android.app.ProgressDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -9,15 +11,19 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_timeline.*
 import kotlinx.android.synthetic.main.item_user_post.view.*
+import org.jetbrains.anko.*
 import rs.mitwit.di.Injector
 import rs.mitwit.models.Post
 import rs.mitwit.models.Timeline
 import rs.mitwit.posts.TimelineView
+import java.text.DateFormat
+import java.util.*
 
-class TimelineActivity : AppCompatActivity(), TimelineView{
+class TimelineActivity : AppCompatActivity(), TimelineView {
 
     private lateinit var postsAdapter: PostsAdapter
     private lateinit var viewManager: RecyclerView.LayoutManager
@@ -52,13 +58,12 @@ class TimelineActivity : AppCompatActivity(), TimelineView{
 
         inner class MyViewHolder(val viewGroup: ViewGroup) : RecyclerView.ViewHolder(viewGroup)
 
-        // Create new views (invoked by the layout manager)
-        override fun onCreateViewHolder(parent: ViewGroup,
-                                        viewType: Int): PostsAdapter.MyViewHolder {
+        override fun onCreateViewHolder(
+            parent: ViewGroup,
+            viewType: Int
+        ): PostsAdapter.MyViewHolder {
             val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_user_post, parent, false) as ViewGroup
-            // set the view's size, margins, paddings and layout parameters //todo?
-
             return MyViewHolder(view)
         }
 
@@ -73,10 +78,9 @@ class TimelineActivity : AppCompatActivity(), TimelineView{
         }
 
         private fun formatTime(epochTime: Long): CharSequence? {
-            return ""//todo
+            return DateFormat.getDateTimeInstance().format(Date(epochTime))
         }
 
-        // Return the size of your dataset (invoked by the layout manager)
         override fun getItemCount() = items.size
     }
 
@@ -85,7 +89,7 @@ class TimelineActivity : AppCompatActivity(), TimelineView{
         super.onDestroy()
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_timeline, menu)
         return true
     }
@@ -116,28 +120,56 @@ class TimelineActivity : AppCompatActivity(), TimelineView{
         postsAdapter.updateList(timeline.posts)
     }
 
+    @Suppress("DEPRECATION")
+    var progressDialog: ProgressDialog? = null
+
     override fun setLoading() {
-        Toast.makeText(this, "Loading", Toast.LENGTH_SHORT).show()//todo
+        @Suppress("DEPRECATION")
+        progressDialog = indeterminateProgressDialog(getString(R.string.loading))
     }
 
     override fun clearLoading() {
-        Toast.makeText(this, "Done loading", Toast.LENGTH_SHORT).show()//todo
+        progressDialog?.dismiss()
+        progressDialog = null
     }
 
     override fun notifyDeleteFailed() {
-        Toast.makeText(this, "Deleting failed", Toast.LENGTH_SHORT).show()//todo
+        Toast.makeText(this, getString(R.string.deleting_failed), Toast.LENGTH_SHORT).show()
     }
 
+    var dialog: DialogInterface? = null
+
     override fun openCreatePostUi() {
-        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        dialog = alert {
+            title = getString(R.string.create_post)
+            isCancelable = true
+            customView {
+                linearLayout {
+                    orientation = LinearLayout.VERTICAL
+                    textView(getString(R.string.post_title))
+                    val title = editText("")
+                    textView(getString(R.string.content))
+                    val content = editText("")
+                    button(getString(R.string.create)) {
+                        setOnClickListener {
+                            presenter.onCreatePostClicked(title.text.toString(), content.text.toString())
+                        }
+                    }
+                    padding = dip(16)
+                }
+            }
+            onCancelled {
+                dialog = null
+            }
+        }.show()
     }
 
     override fun closeCreatePostUi() {
-        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        dialog?.apply { dismiss() }
     }
 
     override fun notifyPostingFailed() {
-        Toast.makeText(this, "Posting failed", Toast.LENGTH_SHORT).show()//todo
+        Toast.makeText(this, getString(R.string.posting_failed), Toast.LENGTH_SHORT).show()
     }
 
 }

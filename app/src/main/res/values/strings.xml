@@ -27,5 +27,14 @@
     <string name="menu_logout">Logout</string>
     <string name="add_post">Add post</string>
     <string name="refresh">Refresh</string>
+    <string name="configure">Configure</string>
+    <string name="create_post">Create post</string>
+    <string name="post_title">Post title:</string>
+    <string name="content">Content:</string>
+    <string name="create">Create</string>
+    <string name="loading">Loading</string>
+    <string name="username_taken">Username taken</string>
+    <string name="deleting_failed">Deleting failed</string>
+    <string name="posting_failed">Creating post failed</string>
 
 </resources>

@@ -7,9 +7,10 @@
     <android.support.v7.widget.AppCompatButton android:layout_width="match_parent"
                                                android:layout_height="wrap_content"
                                                android:id="@+id/add_post_button"
-                                               android:text="aaa"/>
-    <android.support.v7.widget.RecyclerView android:layout_width="match_parent"
-                                            android:layout_height="wrap_content">
+                                               android:text=""/>
+    <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
     </android.support.v7.widget.RecyclerView>
 

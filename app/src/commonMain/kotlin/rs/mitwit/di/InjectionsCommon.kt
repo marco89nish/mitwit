@@ -21,7 +21,7 @@ object Injector {
         InMemoryUserLoginRepository
     }
 
-    private val ktorNetworkService by lazy {
+    val ktorNetworkService by lazy {
         KtorNetworkService("192.168.0.11", 8080, HttpClient { install(JsonFeature) })
     }
 

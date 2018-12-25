@@ -4,8 +4,7 @@
                                               android:layout_height="match_parent"
                                               android:gravity="center_horizontal"
                                               android:orientation="vertical"
-                                              tools:context="rs.mitwit.LoginActivity"
-                                              android:background="@color/design_default_color_primary">
+                                              tools:context="rs.mitwit.LoginActivity">
 
     <!-- Login progress -->
     <android.support.v7.widget.LinearLayoutCompat
@@ -68,20 +67,15 @@
             </android.support.design.widget.TextInputLayout>
 
             <android.support.v7.widget.AppCompatButton
-                    android:padding="@dimen/activity_horizontal_margin"
                     android:id="@+id/email_sign_in_button"
-                    style="?android:textAppearanceSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="36dp"
-                    android:text="@string/action_sign_in_short"
-                    android:textStyle="bold"/>
+                    android:text="@string/action_sign_in_short"/>
 
         </android.support.v7.widget.LinearLayoutCompat>
         <android.support.v7.widget.LinearLayoutCompat
                 android:padding="@dimen/activity_horizontal_margin"
-                android:background="@color/design_default_color_primary_dark"
-                android:id="@+id/sign_up_button"
                 android:layout_weight="0"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -92,9 +86,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/label_sign_up"/>
-            <android.support.v7.widget.AppCompatTextView
-                    android:textSize="18sp"
-                    android:textStyle="bold|italic"
+            <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/sign_up_button"
+                    android:layout_marginTop="6dp"
                     android:gravity="center_horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
