@@ -2,7 +2,7 @@
 
 Kotlin multiplatfom twiter-lite app (very lite, though). Uses MVP/Clean to share as much codebase as possible between Android, iOS and Server. (Need a bit of help for iOS part)
 
-Tech used: Ktor for networking, Coroutines for async, Anko for dialogs, Kotlin 1.3 for language goodies(inline classes).
+Tech used: Ktor for networking and server, Coroutines for async, Anko for dialogs, Kotlin 1.3 for language goodies(inline classes).
 
 ## How to use
 Open in Android Studio or (prefferably) InteliJ IDEA. Import project from gradle if IDE doesn't do it automatically. Check "Delegate IDE build/run action to gradle" box in Settings/Build, Execution, Deployment/Build Tools/Gradle/Runner. Create local.properties file with `sdk.dir` property set. You should be able to build app from there. Binaries will be available in the releases section. 
